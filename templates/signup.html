@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="{% static 'signup.css' %}"/>
+</head>
+<body>
+    
+<div class="🐕">
+    <div class="torso">
+      <div class="fur">
+        <div class="spot"></div>
+      </div>
+      <div class="neck">
+        <div class="fur"></div>
+        <div class="head">
+          <div class="fur">
+            <div class="snout"></div>          
+          </div>
+          <div class="ears">
+            <div class="ear">
+              <div class="fur"></div>
+            </div>
+            <div class="ear">
+              <div class="fur"></div>
+            </div>
+          </div>
+          <div class="eye"></div>
+        </div>
+        <div class="collar">
+          
+        </div>
+      </div>
+      <div class="legs">
+        <div class="leg">
+          <div class="fur"></div>
+          <div class="leg-inner">
+            <div class="fur"></div>
+          </div>
+        </div>
+        <div class="leg">
+          <div class="fur"></div>
+          <div class="leg-inner">
+            <div class="fur"></div>
+          </div>
+        </div>
+        <div class="leg">
+          <div class="fur"></div>
+          <div class="leg-inner">
+            <div class="fur"></div>
+          </div>
+        </div>
+        <div class="leg">
+          <div class="fur"></div>
+          <div class="leg-inner">
+            <div class="fur"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tail">
+        <div class="tail">
+          <div class="tail">
+            <div class="tail -end">
+              <div class="tail">
+                <div class="tail">
+                  <div class="tail">
+                    <div class="tail"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form action="{% url 'users:signup' %}" method="POST">
+      {% csrf_token %}
+      <input id="input-1" name="fullname" type="text" placeholder="FullName" required autofocus />
+      <label for="input-1">
+        <span class="nav-dot"></span>
+        <div class="signup-button-trigger">Sign Up</div>
+      </label>
+      <input id="input-2" name="username" type="text" placeholder="ID" required />
+      <label for="input-2">
+        <span class="nav-dot"></span>
+      </label>
+      <input id="input-3" name="email" type="email" placeholder="email@address.com" required />
+      <label for="input-3">
+        <span class="nav-dot"></span>
+      </label>
+      <input id="input-4" name="password" type="password" placeholder="Password" required />
+      <label for="input-4">
+        <span class="nav-dot"></span>
+      </label>
+      <input id="input-5" name="passwordcheck" type="password" placeholder="CheckPassword" required />
+      <label for="input-5">
+        <span class="nav-dot"></span>
+      </label>
+      <button type="submit" value="가입하기">Create Your Account</button>
+      <p class="tip">Press Tab</p>
+      <div class="signup-button">Sign Up</div>
+  </form>
+</body>
+</html>
