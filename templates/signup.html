@@ -78,6 +78,11 @@
       </div>
     </div>
   </div>
+    {% if error %}
+      <script>
+        alert('{{ error }}')
+      </script>
+    {% endif %}
   <form action="{% url 'users:signup' %}" method="POST">
       {% csrf_token %}
       <input id="input-1" name="fullname" type="text" placeholder="FullName" required autofocus />
@@ -101,9 +106,9 @@
       <label for="input-5">
         <span class="nav-dot"></span>
       </label>
-      <button type="submit" value="가입하기">Create Your Account</button>
-      <p class="tip">Press Tab</p>
-      <div class="signup-button">Sign Up</div>
+        <button type="submit" value="가입하기">Create Your Account</button>
+        <p class="tip">Press Tab</p>
+        <div class="signup-button">Sign Up</div>
   </form>
 </body>
 </html>

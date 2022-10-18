@@ -311,3 +311,9 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,python,venv,django
+
+venv/, 
+.env, 
+db.sqlite3, 
+.idea/, 
+__pycache__/

@@ -544,6 +544,13 @@
     color: #ff4c5b;
   }
 
+  .container .right2 {
+    background: #72f57d;
+  }
+  .container .right2:hover h1 {
+    color: #2057f0;
+  }
+
 a {
     text-decoration-line: none;
 }

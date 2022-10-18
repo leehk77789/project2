@@ -1,9 +1,9 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'main.css' %}" />
@@ -42,7 +42,30 @@
         </div>
       </div>
     </div>
-
     <div class="ball" tabindex="0"></div>
+    <div class="photobox">
+      <div class="leftbox">
+      <form method="post" action="{% url 'post:upload' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+        <main class="container">
+          <label class="label" id="label" for="input">
+            <div class="inner" id="inner">이미지파일을 업로드해주세요</div> 
+          </label>
+          <input name='img' id="input" class="input" accept="image/*" type="file" required="true" multiple="true" hidden="true">
+          <div class="wrapper">
+            <button type="submit" class="button">Upload</button>
+          </div>
+      </form>
+      </div>
+      <div class="rightbox">
+        <div>
+          <img style="width: 10rem; height: 10rem;" src="{% get_media_prefix %}{{ posts.image }}" >
+        </div>
+        <div>
+          내용
+        </div>
+      </div>
+    </div>
+    </main>
   </body>
 </html>
