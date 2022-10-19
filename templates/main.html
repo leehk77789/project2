@@ -58,9 +58,11 @@
       </form>
       </div>
       <div class="rightbox">
+        {% if inference_img %}
         <div>
-          <img style="width: 10rem; height: 10rem;" src="{% get_media_prefix %}{{ posts.image }}" >
+          <img style="width: 20rem; height: 20rem;" src="{{ inference_img }}" >
         </div>
+        {% endif %}
         <div>
           내용
         </div>

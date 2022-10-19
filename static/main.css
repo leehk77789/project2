@@ -385,7 +385,7 @@
 body {
   display: flex;
   flex-direction: column;
-  justify-content: cener;
+  justify-content: center;
   align-items: center;
 }
 
@@ -484,7 +484,7 @@ body {
 
 .leftbox{
   align-items: center;
-  margin-left: 100px;
+  margin-left: 200px;
 }
 
 .rightbox{

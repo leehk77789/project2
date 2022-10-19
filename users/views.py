@@ -20,8 +20,11 @@ def main(request):
             return redirect("users:signin")
         else:  # 현재 접속자가 있는 경우
             user1 = request.user  # 현재 접속자
-            post_object_list = Post.objects.filter(user=user1.id).last()  # post 테이블에 있는 접속자의 최근 사진 한장
-            return render(request, "main.html", context=dict(user=user1, posts=post_object_list))
+            inference_img = "/static/media/result/result.png"
+            context = {
+                "inference_img": inference_img
+            }
+            return render(request, "main.html", context)
              
 
 def signup(request):

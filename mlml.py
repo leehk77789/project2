@@ -26,5 +26,5 @@ for idx, r in enumerate(result_dog):  # dog인 요소에 하나씩 접근
 for idx, r in enumerate(result_cat):  
     cropped = tmp_img[int(r[1]):int(r[3]), int(r[0]):int(r[2])]  
     cv2.imwrite(f'cat{idx+1}.png', cropped) 
-    cv2.rectangle(tmp_img, (int(r[0]), int(r[1])), (int(r[2]), int(r[3])), (255,0,0))
+    cv2.rectangle(tmp_img, (int(r[0]), int(r[1])), (int(r[2]), int(r[3])), (255,255,0))
 cv2.imwrite('result1.png', tmp_img)  # 하얀 네모박스가 그려진 이미지를 result1.png로 저장
