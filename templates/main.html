@@ -389,7 +389,7 @@
                 Start
               </button>
               <button type="button" class="button" onclick="predict()">
-                품종 예측
+                analysis
               </button>
             </div>
           </main>
@@ -397,11 +397,13 @@
       </div>
       <div class="rightbox">
         <div>
-          <img
-            style="width: 15rem; height: 15rem"
-            id="dog_image"
-            src="{% get_media_prefix %}{{ posts.image }}"
-          />
+          <figure class="swing" style="width: 15rem; height: 15rem;">
+            <img
+              style="width: 15rem; height: 15rem;"
+              id="dog_image"
+              src="{% get_media_prefix %}{{ posts.image }}"
+            />
+          </figure>
         </div>
         <div id="label-container" class="label-container"></div>
       </div>
