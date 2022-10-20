@@ -22,7 +22,7 @@ def main(request):
             user1 = request.user  # 현재 접속자
             post_object_list = Post.objects.filter(user=user1.id).last()  # post 테이블에 있는 접속자의 최근 사진 한장
             return render(request, "main.html", context=dict(user=user1, posts=post_object_list))
-             
+
 
 def signup(request):
     if request.method == "GET":
@@ -44,12 +44,13 @@ def signup(request):
             if username == '' or password == '':
                 return render(request, 'signup.html', {'error':'아이디와 비밀번호를 입력 해 주세요.'})
             exist_user = get_user_model().objects.filter(username=username)
-            if exist_user == username:
+
+            if exist_user:
                 return render(request, 'signup.html', {'error':'아이디가 중복입니다!'})
             else:
                 User.objects.create_user(username=username, password=password, fullname=fullname, email=email)
                 return redirect('users:signin')
-       
+
 
 def login(request):
     if request.method == "GET":
