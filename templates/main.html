@@ -5,11 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <!-- Google Icon -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    />
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'main.css' %}" />
   </head>
-  <body style="width:100%; overflow-x:hidden; overflow-y:hidden;">
-    <div class="dog">
+  <body style="width: 100%; overflow-x: hidden; overflow-y: hidden">
+    <div class="dog" onclick="location.href='/'">
       <div class="dog-body">
         <div class="dog-tail">
           <div class="dog-tail">
@@ -44,105 +56,356 @@
     </div>
     <div class="ball" tabindex="0"></div>
     <div class="photobox">
-      <div>Teachable Machine Image Model</div>
-      <button type="button" onclick="init()" style="height: 20rem;">Start</button>
-      <button type="button" onclick="predict()" style="height: 20rem;">품종 예측</button>
       <div id="webcam-container"></div>
-      <div id="label-container"></div>
       <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
       <script type="text/javascript">
-          // More API functions here:
-          // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
-      
-          // the link to your model provided by Teachable Machine export panel
-          const URL = "https://teachablemachine.withgoogle.com/models/N1HVKuyGt/";
-    let model, webcam, labelContainer, maxPredictions;
+        // More API functions here:
+        // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
 
-    // Load the image model and setup the webcam
-    async function init() {
-        const modelURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
+        // the link to your model provided by Teachable Machine export panel
+        const URL = "https://teachablemachine.withgoogle.com/models/N1HVKuyGt/";
+        let model, webcam, labelContainer, maxPredictions;
 
-        // load the model and metadata
-        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-        // or files from your local hard drive
-        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
-        labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) { // and class labels
+        // Load the image model and setup the webcam
+        async function init() {
+          const modelURL = URL + "model.json";
+          const metadataURL = URL + "metadata.json";
+
+          // load the model and metadata
+          // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+          // or files from your local hard drive
+          // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+          model = await tmImage.load(modelURL, metadataURL);
+          maxPredictions = model.getTotalClasses();
+          labelContainer = document.getElementById("label-container");
+          for (let i = 0; i < maxPredictions; i++) {
+            // and class labels
             labelContainer.appendChild(document.createElement("div"));
+          }
         }
-    }
-    // run the webcam image through the image model
-    async function predict() {
-        // predict can take in an image, video or canvas html element
-        var image = document.getElementById("dog_image")
-        const prediction = await model.predict(image, false);
-        if(prediction[0].className == "골든 리트리버" && prediction[0].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>골든 리트리버</strong><br><br>골드와 크림색이 있으며 구불거리며 단색인 털이 수수한 아름다움이 있다. 이중모의 구조기 때문에 봄에 속털이 빠지므로 이 시기에 솔질을 자주 해주어 빠진 털을 제거하여 피부병을 예방하고, 워낙 얌전한 개이므로 인위적인 운동을 시켜 비만을 방지해야 한다."
-        } else if(prediction[1].className == "닥스훈트" && prediction[1].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>닥스훈트</strong><br><br>닥스훈트라는 이름은 독일어의 '오소리 사냥' 이라는 뜻이 담겨져 있으며 초기에는 '테켈(teckel)'이라고 불렸었다. 굴에 숨은 오소리나 여우를 끌어내고 토끼를 추적하는데 활약했던 특징이 외형적으로도 나타난다. 다리가 짧고 몸이 길며 후각이 발달되어 있으며 겁이 없는 편이다. 몸이 길어 체중 조절과 운동에 신경 써 주지 않으면 척추 디스크를 유발하기 쉽다. 명랑하고 장난스러운 성격으로 활동하는 것을 좋아하며 주인의 말을 잘 이해해 좋은 친구로 지내기 적합하다. 반면에 헛짖음이나 무는 성질이 높고 배변 가리는 습관을 들이기가 어려우므로 처음부터 단호하게 훈련을 시켜둘 필요가 있다."
-        } else if(prediction[2].className == "래브라도 리트리버" && prediction[2].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>래브라도 리트리버</strong><br><br>래브라도 리트리버의 털 색은 검은색과 노란색, 그리고 초콜릿 색으로 나뉩니다. 그런데 이 중에서 초콜릿 래브라도의 수명은 유독 다른 래브라도 리트리버에 비해서 짧다고 합니다. 호주 시드니대 연구팀의 연구결과에 따르면 노란색, 검은색 털을 가진 래브라도 리트리버는 평균 12년 정도 살지만 초콜릿 래브라도는 10~11년 정도밖에 살지 못한다고 하네요. 이는 초콜릿 래브라도를 탄생시키기 위해 동종교배를 수차례 진행하다 보니 유전적 다양성이 줄어들어 질병에도 취약해진 탓이라고 합니다."
-        } else if(prediction[3].className == "말티즈" && prediction[3].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>말티즈</strong><br><br>몰티즈는 몰타 섬이 고향으로 알려진 소형견으로 앙증맞은 외모와 애교 넘치는 성격, 흰 털로 많은 사랑을 받는 반려견이다."
-        } else if(prediction[4].className == "미니어처 슈나우저" && prediction[4].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>미니어처 슈나우저</strong><br><br>활동적이고 건강해 보이며 행동이 민첩하다. 공격적이거나 겁이 많은 것과는 거리가 먼 대신에, 성격이 명랑하고 사교적이라 사랑을 받기에 충분하다. 주인에게 충성심을 보이고 장난치는 것을 좋아한다. 낯선 사람을 보면 주의를 기울인다."
-        } else if(prediction[5].className == "미니어처 푸들" && prediction[5].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>미니어처 푸들</strong><br><br>미니어처 푸들은 푸들의 종류 중에서 가장 보편화 되어있다. 활발하고 어떠한 생활방식에도 잘 어울리는 점잖은 강아지이다."
-        } else if(prediction[6].className == "미니어처 핀셔" && prediction[6].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>미니어처 핀셔</strong><br><br>작은 몸집임에도, 대형견과 같은 용맹성과 침착성을 지니고 있다."
-        } else if(prediction[7].className == "베들링턴 테리어" && prediction[7].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>베들링턴 테리어</strong><br><br>베들링턴 테리어는 테리어 중에서 확인된 혈통 내력 중 가장 오래된 견종에 해당한다. 근육이 발달되었고 운동신경이 우수하여 함께 운동하기에 적합하다. 성격은 온화하고 다정다감하다. "
-        } else if(prediction[8].className == "보더 콜리" && prediction[8].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>보더 콜리</strong><br><br>지능이 높고 끈기가 있으며 주인에게 순종하는 기질을 갖고 있다. 일하는 것을 무척 좋아해서 할 일이 없으면 무료함을 느끼고 다른 목양견처럼 작은 동물을 몰고자 하는 경향이 있다. 행동이 빠르고 민첩하며, 균형 잡힌 몸매를 갖고 있으며, 활동적이어서 프리스비나 수영 같은 운동을 매우 잘한다."
-        } else if(prediction[9].className == "보스턴 테리어" && prediction[9].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>보스턴 테리어</strong><br><br>보스턴 테리어는 영리하면서도 생기발랄한 견종이다. 매끄러운 피모에 머리 길이는 짧고 다부진 체형을 가졌다. 태도가 매우 바르고 지능이 뛰어나 반려견으로 손색이 없다."
-        } else if(prediction[10].className == "비글" && prediction[10].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>비글</strong><br><br>비글은 모든 면에서 매우 활동적인 특징을 보이는 하운드다. 작지만 튼튼하고 다부진 체구를 가졌으며, 체력이 우수하고 투지가 넘친다. 기민하고 영리하며 붙임성이 많다. 보통 악마견으로 알려져 있으나, 해외에서는 애완동물 1위에 있는 천사견이다."
-        } else if(prediction[11].className == "시바 이누" && prediction[11].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>시바 이누</strong><br><br>'시바'란 일본어로 '작은 것'을 뜻한다. 1937년 일본의 천연기념물로 지정되었다. 일본에서 가장 많이 기르는 일본견이고 전세계적으로 널리 알려져 있다."
-        } else if(prediction[12].className == "웰시 코기" && prediction[12].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>웰시 코기</strong><br><br>소몰이를 할 정도로 운동량이 많은 개이므로 크기에 비해 많은 운동량을 필요로 한다. 운동을 자주 시켜줄 사람이 있는 집에서 키우기 좋고 마당이 있는 주택이나 넓은 아파트에서 키울 수 있다. 털은 짧은 편이지만 숱이 많고 잘 빠진다. 그러나 매일 빗질만 해주면 별다른 관리는 필요 없다. "
-        } else if(prediction[13].className == "이탈리안 그레이 하운드" && prediction[13].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>이탈리안 그레이 하운드</strong><br><br>약간 내성적이고 수줍음을 탄다. 반면에 단호한 점이 있고 재치도 있다. 행동이 느긋하고 점잖아 가정견으로 사랑을 받았으며 곱게 자란 탓으로 성질이 깔끔하여 주위를 어지럽히지 않는다. 사냥개로서는 후각보다 시력이 뛰어나 시각에 의한 사냥을 한다. "
-        } else if(prediction[14].className == "퍼그" && prediction[14].probability.toFixed(2) >= 0.70) {
-          labelContainer.childNodes[0].innerHTML = "<strong>퍼그</strong><br><br>퍼그는 비율이 잘 맞고 근육이 단단해서 '작지만 알찬'특징이 잘 나타나는 견종이다. 차분한 성격과 다부진 체구를 가졌다."
-        } else {
-          labelContainer.childNodes[0].innerHTML = "미학습 사진입니다!"
+        // run the webcam image through the image model
+        async function predict() {
+          // predict can take in an image, video or canvas html element
+          var image = document.getElementById("dog_image");
+          const prediction = await model.predict(image, false);
+          if (
+            prediction[0].className == "골든 리트리버" &&
+            prediction[0].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>골든 리트리버</strong><br><br>🐕골드와 크림색이 있으며 구불거리며 단색인 털이 수수한 아름다움이 있다. 이중모의 구조기 때문에 봄에 속털이 빠지므로 이 시기에 솔질을 자주 해주어 빠진 털을 제거하여 피부병을 예방하고, 워낙 얌전한 개이므로 인위적인 운동을 시켜 비만을 방지해야 한다.";
+          } else if (
+            prediction[1].className == "닥스훈트" &&
+            prediction[1].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>닥스훈트</strong><br><br>🐕닥스훈트라는 이름은 독일어의 '오소리 사냥' 이라는 뜻이 담겨져 있으며 초기에는 '테켈(teckel)'이라고 불렸었다. 굴에 숨은 오소리나 여우를 끌어내고 토끼를 추적하는데 활약했던 특징이 외형적으로도 나타난다. 다리가 짧고 몸이 길며 후각이 발달되어 있으며 겁이 없는 편이다. 몸이 길어 체중 조절과 운동에 신경 써 주지 않으면 척추 디스크를 유발하기 쉽다. 명랑하고 장난스러운 성격으로 활동하는 것을 좋아하며 주인의 말을 잘 이해해 좋은 친구로 지내기 적합하다. 반면에 헛짖음이나 무는 성질이 높고 배변 가리는 습관을 들이기가 어려우므로 처음부터 단호하게 훈련을 시켜둘 필요가 있다.";
+          } else if (
+            prediction[2].className == "래브라도 리트리버" &&
+            prediction[2].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>래브라도 리트리버</strong><br><br>🐕래브라도 리트리버의 털 색은 검은색과 노란색, 그리고 초콜릿 색으로 나뉩니다. 그런데 이 중에서 초콜릿 래브라도의 수명은 유독 다른 래브라도 리트리버에 비해서 짧다고 합니다. 호주 시드니대 연구팀의 연구결과에 따르면 노란색, 검은색 털을 가진 래브라도 리트리버는 평균 12년 정도 살지만 초콜릿 래브라도는 10~11년 정도밖에 살지 못한다고 하네요. 이는 초콜릿 래브라도를 탄생시키기 위해 동종교배를 수차례 진행하다 보니 유전적 다양성이 줄어들어 질병에도 취약해진 탓이라고 합니다.";
+          } else if (
+            prediction[3].className == "말티즈" &&
+            prediction[3].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>말티즈</strong><br><br>🐕몰티즈는 몰타 섬이 고향으로 알려진 소형견으로 앙증맞은 외모와 애교 넘치는 성격, 흰 털로 많은 사랑을 받는 반려견이다.";
+          } else if (
+            prediction[4].className == "미니어처 슈나우저" &&
+            prediction[4].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>미니어처 슈나우저</strong><br><br>🐕활동적이고 건강해 보이며 행동이 민첩하다. 공격적이거나 겁이 많은 것과는 거리가 먼 대신에, 성격이 명랑하고 사교적이라 사랑을 받기에 충분하다. 주인에게 충성심을 보이고 장난치는 것을 좋아한다. 낯선 사람을 보면 주의를 기울인다.";
+          } else if (
+            prediction[5].className == "미니어처 푸들" &&
+            prediction[5].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>미니어처 푸들</strong><br><br>🐕미니어처 푸들은 푸들의 종류 중에서 가장 보편화 되어있다. 활발하고 어떠한 생활방식에도 잘 어울리는 점잖은 강아지이다.";
+          } else if (
+            prediction[6].className == "미니어처 핀셔" &&
+            prediction[6].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>미니어처 핀셔</strong><br><br>🐕작은 몸집임에도, 대형견과 같은 용맹성과 침착성을 지니고 있다.";
+          } else if (
+            prediction[7].className == "베들링턴 테리어" &&
+            prediction[7].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>베들링턴 테리어</strong><br><br>🐕베들링턴 테리어는 테리어 중에서 확인된 혈통 내력 중 가장 오래된 견종에 해당한다. 근육이 발달되었고 운동신경이 우수하여 함께 운동하기에 적합하다. 성격은 온화하고 다정다감하다. ";
+          } else if (
+            prediction[8].className == "보더 콜리" &&
+            prediction[8].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>보더 콜리</strong><br><br>🐕지능이 높고 끈기가 있으며 주인에게 순종하는 기질을 갖고 있다. 일하는 것을 무척 좋아해서 할 일이 없으면 무료함을 느끼고 다른 목양견처럼 작은 동물을 몰고자 하는 경향이 있다. 행동이 빠르고 민첩하며, 균형 잡힌 몸매를 갖고 있으며, 활동적이어서 프리스비나 수영 같은 운동을 매우 잘한다.";
+          } else if (
+            prediction[9].className == "보스턴 테리어" &&
+            prediction[9].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>보스턴 테리어</strong><br><br>🐕보스턴 테리어는 영리하면서도 생기발랄한 견종이다. 매끄러운 피모에 머리 길이는 짧고 다부진 체형을 가졌다. 태도가 매우 바르고 지능이 뛰어나 반려견으로 손색이 없다.";
+          } else if (
+            prediction[10].className == "비글" &&
+            prediction[10].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>비글</strong><br><br>🐕비글은 모든 면에서 매우 활동적인 특징을 보이는 하운드다. 작지만 튼튼하고 다부진 체구를 가졌으며, 체력이 우수하고 투지가 넘친다. 기민하고 영리하며 붙임성이 많다. 보통 악마견으로 알려져 있으나, 해외에서는 애완동물 1위에 있는 천사견이다.";
+          } else if (
+            prediction[11].className == "시바 이누" &&
+            prediction[11].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>시바 이누</strong><br><br>🐕'시바'란 일본어로 '작은 것'을 뜻한다. 1937년 일본의 천연기념물로 지정되었다. 일본에서 가장 많이 기르는 일본견이고 전세계적으로 널리 알려져 있다.";
+          } else if (
+            prediction[12].className == "웰시 코기" &&
+            prediction[12].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>웰시 코기</strong><br><br>🐕소몰이를 할 정도로 운동량이 많은 개이므로 크기에 비해 많은 운동량을 필요로 한다. 운동을 자주 시켜줄 사람이 있는 집에서 키우기 좋고 마당이 있는 주택이나 넓은 아파트에서 키울 수 있다. 털은 짧은 편이지만 숱이 많고 잘 빠진다. 그러나 매일 빗질만 해주면 별다른 관리는 필요 없다. ";
+          } else if (
+            prediction[13].className == "이탈리안 그레이 하운드" &&
+            prediction[13].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>이탈리안 그레이 하운드</strong><br><br>🐕약간 내성적이고 수줍음을 탄다. 반면에 단호한 점이 있고 재치도 있다. 행동이 느긋하고 점잖아 가정견으로 사랑을 받았으며 곱게 자란 탓으로 성질이 깔끔하여 주위를 어지럽히지 않는다. 사냥개로서는 후각보다 시력이 뛰어나 시각에 의한 사냥을 한다. ";
+          } else if (
+            prediction[14].className == "퍼그" &&
+            prediction[14].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>퍼그</strong><br><br>🐕퍼그는 비율이 잘 맞고 근육이 단단해서 '작지만 알찬'특징이 잘 나타나는 견종이다. 차분한 성격과 다부진 체구를 가졌다.";
+          } else if (
+            prediction[15].className == "뉴펀들랜드" &&
+            prediction[15].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>뉴펀들랜드</strong><br><br>🐕뉴펀들랜드는 인명을 구할 수 있는 큰 체격에, 방수성이 좋은 두꺼운 이중털와 물갈퀴 모양의 발을 가지고 있어 수영능력이 뛰어나다. 큰 곰을 약간 축소한 듯한 다부진 체형이지만 눈이 오목눈으로 작고 귀도 작게 늘어져 있어 무섭다는 느낌은 전혀 주지 않는다.";
+          } else if (
+            prediction[16].className == "도베르만" &&
+            prediction[16].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>도베르만</strong><br><br>🐕도베르만는 도베르만은 독일에서 유래한 중형견으로 명칭은 맨 처음 사육한 사람인 프리드리히 루이 도베르만(1834.1.2~1894.6.9)의 이름에서 온 견종이다. 체구와 달리 우아하고 귀족적인 분위기를 풍긴다. 일을 수행하는 능력과 힘든 일도 해내는 능력이 탁월하다.";
+          } else if (
+            prediction[17].className == "로트 와일러" &&
+            prediction[17].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>로트 와일러</strong><br><br>🐕로트 와일러는 체구는 중형견에서 대형견 사이로, 건장하지만 지나치게 육중하지 않고 가볍지도 않다. 또한 다리가 너무 길거나 몸이 허약해 보여서는 안 된다. 몸의 각 부분이 정확한 비율로 조화를 이룬다. 다부지고 탄탄한 체형은 강력한 힘과 민첩성, 지구력의 바탕이 된다.";
+          } else if (
+            prediction[18].className == "버니즈 마운틴 도그" &&
+            prediction[18].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>버니즈 마운틴 도그</strong><br><br>🐕버니즈 마운틴 도그는 농장에서 기르는 견종으로, 독일 알펜포어란트(도나우강 우측에서 알프스 산기슭까지 이어지는 구릉지대) 지역과 베른 인근의 중부내륙 지역에서 경비견이나 수레를 끄는 개로 활용되던 견종이 조상으로 여겨진다. 특히 베른 주의 리기산 인근에 ‘듀어바흐’라는 작은 마을에 털이 길고 피모가 세 가지 색깔로 구성된 농장견이 특히 많아서, 마을 이름을 딴 ‘듀어바흘러’라는 이름으로 불렸다.";
+          } else if (
+            prediction[19].className == "보르조이" &&
+            prediction[19].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>보르조이</strong><br><br>🐕보르조이는 긴 털을 가지기 때문에 자주 빗어주며 관리를 해주어야 하고, 운동량이 많은 편이므로 매일 운동을 시켜야 한다. 신경이 예민하고 고집이 셀 수 있으므로 보호자가 관심을 가지고 훈련을 잘 시켜야 한다. 또한 움직이는 물체에 대해 본능적으로 반응하기 때문에 반드시 목줄을 착용하고 산책을 해야 한다. 대형견이기 때문에 생후 3년까지 발육이 계속되며, 몸 크기에 비해  먹이의 양은 많지 않은 편이다.";
+          } else if (
+            prediction[20].className == "비즐라" &&
+            prediction[20].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>비즐라</strong><br><br>🐕비즐라는 헝가리에서 넓은 들판을 달리며 사냥감을 추적하기 위해 개량된 개의 한 품종으로, 전신이 붉은 색인 것이 특징인 헝가리의 국견이다. 800년대 경 마자르인(Maryar)이 러시아에서 서유럽으로 말과 함께 이동하며 헝가리에 정착할 때 함께한 붉은 개가 조상이다. ";
+          } else if (
+            prediction[21].className == "사모예드" &&
+            prediction[21].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>사모예드</strong><br><br>🐕사모예드는 기품이 넘치는 북극 지역 흰색 스피츠로, 이름은 러시아 북부와 시베리아 지역에 살던 사모예드 족의 명칭에서 유래됐다. 사교성이 매우 뛰어나며 기민하고 친근하다.";
+          } else if (
+            prediction[22].className == "살루키" &&
+            prediction[22].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>살루키</strong><br><br>🐕살루키는 성격은 냉정하고 내성적이며 모든 일에 소극적이다. 이는 감수성이 예민하기 때문이며 주인에게는 깊은 애정을 가지고 충실하다. 경계심이 강하고 신경질적인 면도 있다. 넓은 들판을 달리며 사냥하던 하운드였기 때문에 운동량이 많아 규칙적인 운동과 달리기가 필요하다.";
+          } else if (
+            prediction[23].className == "세인트 버나드" &&
+            prediction[23].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>세인트 버나드</strong><br><br>🐕구조견으로서의 최고의 견종 몸은 전반적으로 근육질로 두터워 매우 튼튼하며 털이 많고 조밀한 편이어서 추위에도 강하다. 또한 후각이 잘 발달되어 있어 구조견으로서 최고의 견종이다.";
+          } else if (
+            prediction[24].className == "셔틀랜드 쉽독" &&
+            prediction[24].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>셔틀랜드 쉽독</strong><br><br>🐕셰틀랜드 쉽독은 체구가 작고 털이 긴 사역견이다. 전체적으로 균형잡힌 체구이며, 움직임이 유연하고 우아하다. 주인에게 다정하게 대하고 고분고분하다. 체구가 작고 털이 긴 사역견이다. 모습이 아름다우며, 땅딸막하거나 투박하지 않다.";
+          } else if (
+            prediction[25].className == "스키퍼키" &&
+            prediction[25].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>스키퍼키</strong><br><br>🐕개의 한 품종. 원산지가 벨기에이다. 원래는 네덜란드와 벨기에의 배 안에서 선장과 선원 등이 쥐를 잡기 위해 길렀다고 알려져 있다. 벨기에셰퍼드의 조상이 되었으며 19세기 말에 영국으로 건너가고 그 후에 다른 나라에도 퍼져 나갔다.";
+          } else if (
+            prediction[26].className == "승냥이" &&
+            prediction[26].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>승냥이</strong><br><br>🐕개과에 속하는 야생 육식동물. 돌·개승냥이·붉은이리·아시아들개·붉은말승냥이·인도들개 등 여러 이름으로 불린다. 몸길이 88~113㎝, 꼬리길이 40~55cm, 어깨높이 40~50cm, 몸무게 10~21kg이다.";
+          } else if (
+            prediction[27].className == "시베리안 허스키" &&
+            prediction[27].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>시베리안 허스키</strong><br><br>🐕시베리안 허스키는 쫑긋한 귀와 빗자루 같은 꼬리, 적당한 근육을 가졌다. 사람을 좋아하고 주인의 기분을 잘 헤아린다.";
+          } else if (
+            prediction[28].className == "실리엄 테리어" &&
+            prediction[28].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>실리엄 테리어</strong><br><br>🐕실리엄 테리어의 원산지는 영국의 웨일스 지방이다. 19세기 중후반에 펨브룩의 '실리엄'이라는 저택에 살던 존 에드워드라는 사람이 물가에서 사냥할 수 있는 사냥개를 얻으려고 만들어낸 품종이다. 여러 종류의 테리어에 웰시코기종 등을 교배시켰다. 짖는 소리가 매우 커서 사냥개로 유명했으며 지금은 집지키는 개로 길러지고 있다.";
+          } else if (
+            prediction[29].className == "알래스칸 말라뮤트" &&
+            prediction[29].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>알래스칸 말라뮤트</strong><br><br>🐕알래스칸 말라뮤트는 썰매를 끄는 개로 스피츠 계통으로 이누이트 중 마흘레뭇 족(Mahlemut)이 처음부터 이 목적으로 개량했기 때문에 이런 이름이 붙었다. 몸집도 큰 대형견에 근육질이고, 귀는 쫑긋하며 꼬리도 늘 위로 쏠랑 말려 올라가 있어 늠름해 보인다. 회색-흰색 / 흰색-검정 / 흰색-붉은색을 띄는데 드물게 흰색 단색을 띄는 개체도 있다고 한다.";
+          } else if (
+            prediction[30].className == "에어데일" &&
+            prediction[30].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>에어데일</strong><br><br>🐕에어데일은 테리어류 중에서 몸집이 가장 크다. 키는 56~61cm, 몸무게는 20~23kg이며 머리와 몸통이 직사각형이다. 오소리와 수달 사냥용으로 길렀으나 지금은 애완용으로 기른다.";
+          } else if (
+            prediction[31].className == "엔틀부처 마운틴 도그" &&
+            prediction[31].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>엔틀부처 마운틴 도그</strong><br><br>🐕엔틀부처 마운틴 도그는 스위스에서 가축들을 돌보기 위해 개량한 개의 한 품종이며, 삼색털을 가지는 것이 특징이다.";
+          } else if (
+            prediction[32].className == "요크셔 테리어" &&
+            prediction[32].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>요크셔 테리어</strong><br><br>🐕요크셔 테리어는 1850년대에 처음 등장한 견종으로 옛 견종인 '블랙 앤 탄 테리어'에서 유래되었다. 기다란 털이 코에서 부터 꼬리 끝까지 몸 양쪽에서 균등하게 나뉘어 아래로 곧게 뻗은 것이 특징이다.";
+          } else if (
+            prediction[33].className == "저먼 셰퍼드" &&
+            prediction[33].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>저먼 셰퍼드</strong><br><br>🐕저먼 셰퍼드는 독일에서 목양견의 목적으로 개량된 개의 한 품종이며, 전세계에서 경찰견, 군견등으로 활약하고 있다. 원산지는 독일이며, 독일의 국견으로 알려져 있다. 자국 내에서는 ‘엘세이션(Alsation)’이라고도 한다.";
+          }else if (
+            prediction[34].className == "차우차우" &&
+            prediction[34].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>차우차우</strong><br><br>🐕차우차우는 귀가 작고 곧게 서며 혀ㆍ입천장ㆍ잇몸이 짙은 보라색이며, 털은 많고 두꺼우며 갈기가 있다. 애완용으로 진귀한 품종이며 중국이 원산지이다.";
+          } else if (
+            prediction[35].className == "치와와" &&
+            prediction[35].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>치와와</strong><br><br>🐕치와와는 멕시코 치와와주의 이름을 따서 붙여진 것으로 알려져 있다. 세계에서 체구가 가장 작은 견종이다. 행동이 매우 빠르고 기민하다.";
+          } else if (
+            prediction[36].className == "코몬도르" &&
+            prediction[36].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>코몬도르</strong><br><br>🐕코몬도르는 이마가 넓어서 머리가 짧아 보이는 것이 특징이며 귀는 중간 크기의 V자 모양으로 아래로 늘어져 있다. 눈은 눈꼬리가 치켜올라간 아몬드 모양이며 코는 검은색이고 콧구멍이 크다. 가슴이 넓고 등은 수평이며 앞다리는 반듯하고 뼈대가 굵다. 발은 크고 둥글고 며느리발톱은 없애준다. 꼬리는 긴장하면 위로 올라가 등과 수평을 이루며 잘라주지 않는다. 성격은 조상님 닮아서 사나운 편.";
+          } else if (
+            prediction[37].className == "코카 스파니엘" &&
+            prediction[37].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>코카 스파니엘</strong><br><br>🐕코카 스파니엘은 온순하고 다정한 성격을 갖고 있어 어린아이에게 훌륭한 친구가 되어준다. 낙천적인 성격을 갖고 있고 많이 짖는 편은 아니다.";
+          } else if (
+            prediction[38].className == "콜리" &&
+            prediction[38].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>콜리</strong><br><br>🐕콜리는 영국에서 목양견으로 개량한 개의 한 품종이다. 영국 스코틀랜드 원산의 목양견이다. 목양견으로써의 명성이 높았던 품종으로 1860년대에 빅토리아 여왕이 스코틀랜드의 발모럴성에 머무는 동안 그 지역의 목양견을 반려견으로 사육하면서 대중들에게 알려지고 유명해졌다.";
+          } else if (
+            prediction[39].className == "토이 푸들" &&
+            prediction[39].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>토이 푸들</strong><br><br>🐕토이 푸들은 프랑스가 자랑하는 팔방미인 강아지이다. 스탠더드, 미니어처 푸들과 마찬가지로 똑똑하며 붙임성이 있다.";
+          } else if (
+            prediction[40].className == "파피용" &&
+            prediction[40].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>파피용</strong><br><br>🐕파피용은 작고 우호적이고, 우아한 애완견으로서 뼈대가 가는 구조이며, 가볍고 섬세하고, 경쾌한 동작을 하며, 아름다운 나비 같은 귀로 인하여 다른 견종들과 구별되는 개이다.";
+          } else if (
+            prediction[41].className == "페키니즈" &&
+            prediction[41].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>페키니즈</strong><br><br>🐕페키니즈는 사자 같은 모습에 기민하고 영리한 인상을 풍기는 견종이다. 작지만 균형이 잘 잡혔으며, 적당히 두툼한 체형에서 위엄이 느껴진다. 주변에 무관심한 편이나 겁이 없고 충성심이 강하다.";
+          } else if (
+            prediction[42].className == "포메라니안" &&
+            prediction[42].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>포메라니안</strong><br><br>🐕포메라니안은 북극에서 썰매를 끌던 개들의 후손으로 초창기에는 지금보다 큰 편이었다. 공처럼 둥글고 풍성하게 부풀어 오른 털이 특징이다. 여우와 비슷한 깜찍한 얼굴에 작은 눈망울이 매력적이고 보호본능이 생기는 귀여운 품종이다.";
+          } else if (
+            prediction[43].className == "푸들" &&
+            prediction[43].probability.toFixed(2) >= 0.7
+          ) {
+            labelContainer.childNodes[0].innerHTML =
+              "<strong>푸들</strong><br><br>🐕푸들은 야생물새 사냥에 활용되던 견종으로 충성심이 깊기로 유명한 견종이다. 곱슬곱슬한 털이 돌돌 말리거나 매듭처럼 꼬인 형태로 덮여있다. 학습 능력이 뛰어나 훈련시키기 쉬워 반려견으로 매우 적합하다.";
+          } else {
+            labelContainer.childNodes[0].innerHTML = "<strong>🐕미학습 강아지 입니다🐕</strong>"
+          }
+          // for (let i = 0; i < maxPredictions; i++) {
+          //     const classPrediction =
+          //         prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+          //     labelContainer.childNodes[i].innerHTML = classPrediction;
+          // }
         }
-        // for (let i = 0; i < maxPredictions; i++) {
-        //     const classPrediction =
-        //         prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-        //     labelContainer.childNodes[i].innerHTML = classPrediction;
-        // }
-    }
-</script>
-
-      <div class="leftbox">
-      <form method="post" action="{% url 'post:upload' %}" enctype="multipart/form-data">
-      {% csrf_token %}
-        <main class="container">
-          <label class="label" id="label" for="input">
-            <div class="inner" id="inner" >이미지파일</div> 
-          </label>
-          <input name='img' id="input" class="input" accept="image/*" type="file" required="true" multiple="true" hidden="true">
-          <div class="wrapper">
-            <button type="submit" class="button">Upload</button>
+      </script>
+        <div class="leftbox">
+          <form
+            method="post"
+            action="{% url 'post:upload' %}"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <main class="container">
+              <label class="label" id="label" for="input">
+                <div class="inner" id="inner">이미지파일</div>
+              </label>
+              <input
+                name="img"
+                id="input"
+                class="input"
+                accept="image/*"
+                type="file"
+                required="true"
+                multiple="true"
+                hidden="true"
+              />
+              <div class="wrapper">
+                <button type="submit" class="button">Upload</button>
+                <button type="button" class="button" onclick="init()">
+                  Start
+                </button>
+                <button type="button" class="button" onclick="predict()">
+                  품종 예측
+                </button>
+              </div>
+            </main>
+          </form>
+        </div>
+        <div class="rightbox">
+          <div>
+            <img
+              style="width: 15rem; height: 15rem"
+              id="dog_image"
+              src="{% get_media_prefix %}{{ posts.image }}"
+            />
           </div>
-      </form>
-      </div>
-      <div class="rightbox">
-        <div>
-          <img style="width: 10rem; height: 10rem;" id="dog_image" src="{% get_media_prefix %}{{ posts.image }}" >
+          <div id="label-container" class="label-container"></div>
         </div>
-        <div>
-          내용
-        </div>
-      </div>
     </div>
-    </main>
   </body>
 </html>
