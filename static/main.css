@@ -387,6 +387,7 @@ html,
 body {
   font-family: "Open Sans", "sans-serif";
   align-items: center;
+  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -469,8 +470,7 @@ body {
 
 .leftbox {
   align-items: center;
-  margin-left: 100px;
-  margin-top: 50px;
+  margin-top: 100px;
 }
 
 .rightbox {
@@ -478,6 +478,8 @@ body {
   width: 800px;
   margin-left: 100px;
   flex-direction: column;
+  align-items: center;
+  text-align: center; 
 }
 
 @keyframes sheen {
@@ -541,10 +543,46 @@ body {
   cursor: pointer;
   transition: 0.3s;
   display: block;
-  margin-left: auto;
   margin-right: auto;
 }
 
 #dog_image:hover {
   opacity: 0.7;
+}
+
+.swing {
+  animation: swing ease-in-out 1s infinite alternate;
+  transform-origin: center -20px;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+  margin-left: 270px;
+}
+.swing img {
+  border: 5px solid #f8f8f8;
+  display: block;
+}
+.swing:after{
+  content: '';
+  position: absolute;  
+  width: 20px; height: 20px;  
+  border: 1px solid #999;
+  top: -10px; left: 50%;
+  z-index: 0;
+  border-bottom: none;
+  border-right: none;
+  transform: rotate(45deg);
+}
+/* nail */
+.swing:before{
+  content: '';
+  position: absolute;
+  width: 5px; height: 5px;
+  top: -14px;left: 54%;
+  z-index: 5;
+  border-radius: 50% 50%;
+  background: #000;
+}
+
+@keyframes swing {
+  0% { transform: rotate(3deg); }
+  100% { transform: rotate(-3deg); }
 }
