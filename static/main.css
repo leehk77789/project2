@@ -434,7 +434,7 @@ body {
   margin: 64px auto;
   border-radius: 8px;
   font-size: 32px;
-  line-height: 300px;
+  line-height: 30px;
   background-color: var(--bgColor);
   color: var(--text);
 }

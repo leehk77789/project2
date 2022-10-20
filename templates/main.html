@@ -44,12 +44,89 @@
     </div>
     <div class="ball" tabindex="0"></div>
     <div class="photobox">
+      <div>Teachable Machine Image Model</div>
+      <button type="button" onclick="init()" style="height: 20rem;">Start</button>
+      <button type="button" onclick="predict()" style="height: 20rem;">품종 예측</button>
+      <div id="webcam-container"></div>
+      <div id="label-container"></div>
+      <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+      <script type="text/javascript">
+          // More API functions here:
+          // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+      
+          // the link to your model provided by Teachable Machine export panel
+          const URL = "https://teachablemachine.withgoogle.com/models/N1HVKuyGt/";
+    let model, webcam, labelContainer, maxPredictions;
+
+    // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+    // run the webcam image through the image model
+    async function predict() {
+        // predict can take in an image, video or canvas html element
+        var image = document.getElementById("dog_image")
+        const prediction = await model.predict(image, false);
+        if(prediction[0].className == "골든 리트리버" && prediction[0].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>골든 리트리버</strong><br><br>골드와 크림색이 있으며 구불거리며 단색인 털이 수수한 아름다움이 있다. 이중모의 구조기 때문에 봄에 속털이 빠지므로 이 시기에 솔질을 자주 해주어 빠진 털을 제거하여 피부병을 예방하고, 워낙 얌전한 개이므로 인위적인 운동을 시켜 비만을 방지해야 한다."
+        } else if(prediction[1].className == "닥스훈트" && prediction[1].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>닥스훈트</strong><br><br>닥스훈트라는 이름은 독일어의 '오소리 사냥' 이라는 뜻이 담겨져 있으며 초기에는 '테켈(teckel)'이라고 불렸었다. 굴에 숨은 오소리나 여우를 끌어내고 토끼를 추적하는데 활약했던 특징이 외형적으로도 나타난다. 다리가 짧고 몸이 길며 후각이 발달되어 있으며 겁이 없는 편이다. 몸이 길어 체중 조절과 운동에 신경 써 주지 않으면 척추 디스크를 유발하기 쉽다. 명랑하고 장난스러운 성격으로 활동하는 것을 좋아하며 주인의 말을 잘 이해해 좋은 친구로 지내기 적합하다. 반면에 헛짖음이나 무는 성질이 높고 배변 가리는 습관을 들이기가 어려우므로 처음부터 단호하게 훈련을 시켜둘 필요가 있다."
+        } else if(prediction[2].className == "래브라도 리트리버" && prediction[2].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>래브라도 리트리버</strong><br><br>래브라도 리트리버의 털 색은 검은색과 노란색, 그리고 초콜릿 색으로 나뉩니다. 그런데 이 중에서 초콜릿 래브라도의 수명은 유독 다른 래브라도 리트리버에 비해서 짧다고 합니다. 호주 시드니대 연구팀의 연구결과에 따르면 노란색, 검은색 털을 가진 래브라도 리트리버는 평균 12년 정도 살지만 초콜릿 래브라도는 10~11년 정도밖에 살지 못한다고 하네요. 이는 초콜릿 래브라도를 탄생시키기 위해 동종교배를 수차례 진행하다 보니 유전적 다양성이 줄어들어 질병에도 취약해진 탓이라고 합니다."
+        } else if(prediction[3].className == "말티즈" && prediction[3].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>말티즈</strong><br><br>몰티즈는 몰타 섬이 고향으로 알려진 소형견으로 앙증맞은 외모와 애교 넘치는 성격, 흰 털로 많은 사랑을 받는 반려견이다."
+        } else if(prediction[4].className == "미니어처 슈나우저" && prediction[4].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>미니어처 슈나우저</strong><br><br>활동적이고 건강해 보이며 행동이 민첩하다. 공격적이거나 겁이 많은 것과는 거리가 먼 대신에, 성격이 명랑하고 사교적이라 사랑을 받기에 충분하다. 주인에게 충성심을 보이고 장난치는 것을 좋아한다. 낯선 사람을 보면 주의를 기울인다."
+        } else if(prediction[5].className == "미니어처 푸들" && prediction[5].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>미니어처 푸들</strong><br><br>미니어처 푸들은 푸들의 종류 중에서 가장 보편화 되어있다. 활발하고 어떠한 생활방식에도 잘 어울리는 점잖은 강아지이다."
+        } else if(prediction[6].className == "미니어처 핀셔" && prediction[6].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>미니어처 핀셔</strong><br><br>작은 몸집임에도, 대형견과 같은 용맹성과 침착성을 지니고 있다."
+        } else if(prediction[7].className == "베들링턴 테리어" && prediction[7].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>베들링턴 테리어</strong><br><br>베들링턴 테리어는 테리어 중에서 확인된 혈통 내력 중 가장 오래된 견종에 해당한다. 근육이 발달되었고 운동신경이 우수하여 함께 운동하기에 적합하다. 성격은 온화하고 다정다감하다. "
+        } else if(prediction[8].className == "보더 콜리" && prediction[8].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>보더 콜리</strong><br><br>지능이 높고 끈기가 있으며 주인에게 순종하는 기질을 갖고 있다. 일하는 것을 무척 좋아해서 할 일이 없으면 무료함을 느끼고 다른 목양견처럼 작은 동물을 몰고자 하는 경향이 있다. 행동이 빠르고 민첩하며, 균형 잡힌 몸매를 갖고 있으며, 활동적이어서 프리스비나 수영 같은 운동을 매우 잘한다."
+        } else if(prediction[9].className == "보스턴 테리어" && prediction[9].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>보스턴 테리어</strong><br><br>보스턴 테리어는 영리하면서도 생기발랄한 견종이다. 매끄러운 피모에 머리 길이는 짧고 다부진 체형을 가졌다. 태도가 매우 바르고 지능이 뛰어나 반려견으로 손색이 없다."
+        } else if(prediction[10].className == "비글" && prediction[10].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>비글</strong><br><br>비글은 모든 면에서 매우 활동적인 특징을 보이는 하운드다. 작지만 튼튼하고 다부진 체구를 가졌으며, 체력이 우수하고 투지가 넘친다. 기민하고 영리하며 붙임성이 많다. 보통 악마견으로 알려져 있으나, 해외에서는 애완동물 1위에 있는 천사견이다."
+        } else if(prediction[11].className == "시바 이누" && prediction[11].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>시바 이누</strong><br><br>'시바'란 일본어로 '작은 것'을 뜻한다. 1937년 일본의 천연기념물로 지정되었다. 일본에서 가장 많이 기르는 일본견이고 전세계적으로 널리 알려져 있다."
+        } else if(prediction[12].className == "웰시 코기" && prediction[12].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>웰시 코기</strong><br><br>소몰이를 할 정도로 운동량이 많은 개이므로 크기에 비해 많은 운동량을 필요로 한다. 운동을 자주 시켜줄 사람이 있는 집에서 키우기 좋고 마당이 있는 주택이나 넓은 아파트에서 키울 수 있다. 털은 짧은 편이지만 숱이 많고 잘 빠진다. 그러나 매일 빗질만 해주면 별다른 관리는 필요 없다. "
+        } else if(prediction[13].className == "이탈리안 그레이 하운드" && prediction[13].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>이탈리안 그레이 하운드</strong><br><br>약간 내성적이고 수줍음을 탄다. 반면에 단호한 점이 있고 재치도 있다. 행동이 느긋하고 점잖아 가정견으로 사랑을 받았으며 곱게 자란 탓으로 성질이 깔끔하여 주위를 어지럽히지 않는다. 사냥개로서는 후각보다 시력이 뛰어나 시각에 의한 사냥을 한다. "
+        } else if(prediction[14].className == "퍼그" && prediction[14].probability.toFixed(2) >= 0.70) {
+          labelContainer.childNodes[0].innerHTML = "<strong>퍼그</strong><br><br>퍼그는 비율이 잘 맞고 근육이 단단해서 '작지만 알찬'특징이 잘 나타나는 견종이다. 차분한 성격과 다부진 체구를 가졌다."
+        } else {
+          labelContainer.childNodes[0].innerHTML = "미학습 사진입니다!"
+        }
+        // for (let i = 0; i < maxPredictions; i++) {
+        //     const classPrediction =
+        //         prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        //     labelContainer.childNodes[i].innerHTML = classPrediction;
+        // }
+    }
+</script>
+
       <div class="leftbox">
       <form method="post" action="{% url 'post:upload' %}" enctype="multipart/form-data">
       {% csrf_token %}
         <main class="container">
           <label class="label" id="label" for="input">
-            <div class="inner" id="inner">이미지파일을 업로드해주세요</div> 
+            <div class="inner" id="inner" >이미지파일</div> 
           </label>
           <input name='img' id="input" class="input" accept="image/*" type="file" required="true" multiple="true" hidden="true">
           <div class="wrapper">
@@ -59,7 +136,7 @@
       </div>
       <div class="rightbox">
         <div>
-          <img style="width: 10rem; height: 10rem;" src="{% get_media_prefix %}{{ posts.image }}" >
+          <img style="width: 10rem; height: 10rem;" id="dog_image" src="{% get_media_prefix %}{{ posts.image }}" >
         </div>
         <div>
           내용
