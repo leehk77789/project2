@@ -14,7 +14,7 @@
 
 ## 기본 기능
 * 이미지 업로드 기능
-* 업로드 된 강아지 품종 구분하기
+* 업로드 된 강아지 품종 구분하기(43종)
 
 ## 추가 기능
 * 회원가입, 로그인, 로그아웃 기능 
@@ -23,20 +23,23 @@
 * 품종 별 사용자 업로드 사진 보여주기
  
 ## 화면 설계
-> 로그인
-<img src="https://user-images.githubusercontent.com/42130343/196895906-8e4e4fa8-9b36-43b5-99a6-b6b9e4e1a35b.png" width="80%">  
-> 회원가입 
-<img src="https://user-images.githubusercontent.com/42130343/196895935-d8aea3b2-3422-4d74-bcc8-cfe355316fd4.png" width="80%">  
-> 메인화면  
-<img src="https://user-images.githubusercontent.com/42130343/196895961-650827a3-f7cd-4d29-91e3-ab8a8fef75c1.png" width="80%">  
-> 강아지판별 
+<img src="https://user-images.githubusercontent.com/42130343/196895906-8e4e4fa8-9b36-43b5-99a6-b6b9e4e1a35b.png" width="80%">
+로그인
+<img src="https://user-images.githubusercontent.com/42130343/196895935-d8aea3b2-3422-4d74-bcc8-cfe355316fd4.png" width="80%">
+회원가입   
+<img src="https://user-images.githubusercontent.com/42130343/196895961-650827a3-f7cd-4d29-91e3-ab8a8fef75c1.png" width="80%">
+메인화면
 <img src="https://user-images.githubusercontent.com/42130343/196895984-3baf57c4-fdcb-4cc2-9108-5002e70c1e86.png" width="80%">
+강아지판별 
 
 ## DB 설계
 <img src="https://user-images.githubusercontent.com/42130343/196904661-324299a2-5abc-4613-b9da-dd0ae9220f45.PNG" width="80%">
 
 ## API 설계
 <img src="https://user-images.githubusercontent.com/42130343/196929662-35c3743d-2ce7-4e0c-a909-b123a783c58b.PNG" width="80%">
+
+## 시연 영상
+<https://youtu.be/r1UTovfv-dA>
 
 ## 느낀점
 * 정태희  
