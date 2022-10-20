@@ -36,7 +36,7 @@
 <img src="https://user-images.githubusercontent.com/42130343/196904661-324299a2-5abc-4613-b9da-dd0ae9220f45.PNG" width="80%">
 
 ## API 설계
-<img src="" width="80%">
+<img src="https://user-images.githubusercontent.com/42130343/196927493-717fb2f3-143c-4bc8-9451-d04def3b8752.PNG" width="80%">
 
 ## 느낀점
 * 정태희  
